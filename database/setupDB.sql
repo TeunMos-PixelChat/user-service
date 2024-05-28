@@ -1,0 +1,7 @@
+CREATE SCHEMA IF NOT EXISTS user_service;
+
+CREATE TABLE IF NOT EXISTS user_service.users (
+  id VARCHAR(255) PRIMARY KEY,
+  status VARCHAR(255),
+);
+
