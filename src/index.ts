@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 
 
 app.get("/", (req: Request, res: Response) => {
-  res.send(`Hello, world! ${isProduction ? "Production" : "Development"}`);
+  res.send(`Hello, world! ${isProduction ? "Production" : "Development"}, user-service`);
 });
 
 app.post("/test", (req: Request, res: Response) => {
