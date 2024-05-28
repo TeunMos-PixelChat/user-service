@@ -1,11 +1,17 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from "dotenv";
 import cors from 'cors';
+import dbclient from './dbclient';
 
 dotenv.config();
 
 const isProduction = process.env.NODE_ENV === "production";
 console.log(`isProduction: ${isProduction}`);
+
+if (!process.env.POSTGRES_CONN_STRING) {
+  console.error('Postgres connection string not set!')
+}
+const db = new dbclient(process.env.POSTGRES_CONN_STRING as string);
 
 const app: Express = express();
 const port = process.env.PORT || 3002;
