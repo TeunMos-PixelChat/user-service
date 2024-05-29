@@ -53,6 +53,17 @@ export default class Auth0Service {
     return response.data;
   }
 
+  async getUser(accessToken: string, userId: string): Promise<User> {
+    const url = `https://${this.domain}/api/v2/users/${userId}`;
+    const response = await axios.get<User>(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+
+    return response.data;
+  }
+
 
 
 }

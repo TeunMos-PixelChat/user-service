@@ -91,6 +91,25 @@ app.get("/users", async (req: Request, res: Response) => {
 });
 
 
+app.get("/user/:id", async (req: Request, res: Response) => {
+  const user = useAuthUser(req, res);
+  if (!user) return; // unauthorized
+
+  const accessToken = await auth0.getAccessToken();
+  const userId = req.params.id;
+
+  const userData = await auth0.getUser(accessToken, userId);
+
+  const formattedUser = {
+    id: userData.user_id,
+    name: userData.name,
+    nickname: userData.nickname,
+    picture: userData.picture,
+  };
+
+  res.json(formattedUser);
+});
+
 
 const server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
