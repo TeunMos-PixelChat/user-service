@@ -12,7 +12,9 @@
   "author": "TeunMos",
   "license": "ISC",
   "dependencies": {
+    "@types/auth0": "^3.3.10",
     "@types/node": "^20.11.21",
+    "axios": "^1.7.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "drizzle-orm": "^0.30.10",

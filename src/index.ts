@@ -1,7 +1,8 @@
 import express, { Express, Request, Response } from 'express';
 import dotenv from "dotenv";
 import cors from 'cors';
-import dbclient from './dbclient';
+import dbclient from './services/dbclient';
+import Auth0Service from './services/auth0';
 
 dotenv.config();
 
@@ -11,7 +12,18 @@ console.log(`isProduction: ${isProduction}`);
 if (!process.env.POSTGRES_CONN_STRING) {
   console.error('Postgres connection string not set!')
 }
+
+if (!process.env.AUTH0_CLIENT_ID || !process.env.AUTH0_CLIENT_SECRET || !process.env.AUTH0_DOMAIN) {
+  console.error('Auth0 credentials not set!')
+}
+
+
 const db = new dbclient(process.env.POSTGRES_CONN_STRING as string);
+const auth0 = new Auth0Service(
+  process.env.AUTH0_CLIENT_ID as string,
+  process.env.AUTH0_CLIENT_SECRET as string,
+  process.env.AUTH0_DOMAIN as string,
+);
 
 const app: Express = express();
 const port = process.env.PORT || 3002;
@@ -39,10 +51,10 @@ app.use((req, res, next) => {
   next();
 });
 
-
 app.get("/", (req: Request, res: Response) => {
   res.send(`Hello, world! ${isProduction ? "Production" : "Development"}, user-service`);
 });
+
 
 app.post("/test", (req: Request, res: Response) => {
   const body = req.body;
@@ -55,6 +67,27 @@ app.post("/test", (req: Request, res: Response) => {
     meta: "This is a test endpoint. bloep blap bloop.\nYou are authorized.",
     userId: user,
   });
+});
+
+app.get("/users", async (req: Request, res: Response) => {
+  const user = useAuthUser(req, res);
+  if (!user) return; // unauthorized
+
+  const accessToken = await auth0.getAccessToken();
+  const users = await auth0.getUsers(accessToken);
+
+  const formattedUsers = users.map((user) => {
+    return {
+      id: user.user_id,
+      name: user.name,
+      nickname: user.nickname,
+      picture: user.picture,
+    };
+  });
+
+  // TODO: get status of each user from db
+
+  res.json(formattedUsers);
 });
 
 
