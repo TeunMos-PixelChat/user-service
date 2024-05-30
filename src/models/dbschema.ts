@@ -7,7 +7,11 @@ export const user_service = pgSchema("user_service");
 export const users = user_service.table("users", {
     id: varchar('id', { length: 255 }).notNull().primaryKey(),
     status: varchar('status', { length: 255 }),
+    name: varchar('name', { length: 255 }).notNull(),
+    nickname: varchar('nickname', { length: 255 }).notNull(),
+    picture: varchar('picture', { length: 255 }).notNull(),
     createdAt: timestamp('created_at'),
+    updatedAt: timestamp('updated_at'),
   }
 );
 
