@@ -21,7 +21,6 @@ config:
   apdex:
     threshold: 100
   payload:
-    # path is relative to the location of the test script
     path: 'users.csv'
     fields:
       - 'userid'
@@ -37,5 +36,5 @@ scenarios:
             url: "/users"
             headers:
               x-user-id: '{{ userid }}'
-        - think: 0.2
-        count: 10
+        - think: 1
+        count: 5
