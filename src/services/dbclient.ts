@@ -86,6 +86,15 @@ export default class dbclient {
     return updatedUser[0];
   }
 
+  async getUsers(): Promise<User[]> {
+    if (!this.db) {
+      throw new Error("Database not initialized");
+    }
+
+    const userList = await this.db.select().from(users);
+    return userList;
+  }
+
 }
 
 

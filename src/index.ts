@@ -53,6 +53,7 @@ function useAuthUser(req: Request, res: Response) {
 
 async function getUser(userId: string)  {
   const user = await db.getUser(userId);
+
   if (!user) {
     console.log(`User not found in database, fetching from Auth0: ${userId}`);
     const accessToken = await auth0.getAccessToken();
@@ -113,12 +114,14 @@ app.get("/users", async (req: Request, res: Response) => {
   const user = useAuthUser(req, res);
   if (!user) return; // unauthorized
 
-  const accessToken = await auth0.getAccessToken();
-  const users = await auth0.getUsers(accessToken);
+  // const accessToken = await auth0.getAccessToken();
+  // const users = await auth0.getUsers(accessToken);
+
+  const users = await db.getUsers();
 
   const formattedUsers = users.map((user) => {
     return {
-      id: user.user_id,
+      id: user.id,
       name: user.name,
       nickname: user.nickname,
       picture: user.picture,
@@ -126,10 +129,10 @@ app.get("/users", async (req: Request, res: Response) => {
   });
 
   // remove this in the future
-  formattedUsers.forEach(async (user) => {
-    if (!user.id) return;
-    await getUser(user.id);
-  });
+  // formattedUsers.forEach(async (user) => {
+  //   if (!user.id) return;
+  //   await getUser(user.id);
+  // });
 
   res.json(formattedUsers);
 });

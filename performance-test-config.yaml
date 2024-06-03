@@ -1,0 +1,39 @@
+config:
+  target: http://10.43.228.157:3002
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      rampTo: 5
+      name: Warm up phase
+    - duration: 60
+      arrivalRate: 10
+      rampTo: 35
+      name: Ramp up load
+    - duration: 100
+      arrivalRate: 35
+      rampTo: 200
+      name: Spike phase
+  # Load & configure a couple of useful plugins
+  # https://docs.art/reference/extensions
+  plugins:
+    apdex: {}
+    metrics-by-endpoint: {}
+  apdex:
+    threshold: 100
+  payload:
+    # path is relative to the location of the test script
+    path: 'users.csv'
+    fields:
+      - 'userid'
+      - 'email'
+scenarios:
+  - flow:
+      - get:
+          url: "/user"
+          headers:
+            x-user-id: '{{ userid }}'
+      - get:
+          url: "/users"
+          headers:
+            x-user-id: '{{ userid }}'
+
