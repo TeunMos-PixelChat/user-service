@@ -14,8 +14,6 @@ export default class dbclient {
     this.client = new Client({
       connectionString: connString,
     })
-
-    this.init();
   }
 
   async init() {
@@ -25,6 +23,10 @@ export default class dbclient {
   }
 
   async getUser(userID: string): Promise<User | null> {
+    if (!this.db) {
+      await this.init();
+    }
+
     if (!this.db) {
       throw new Error("Database not initialized");
     }
@@ -45,6 +47,10 @@ export default class dbclient {
 
   async createUser(newUser: UserInsert): Promise<User> {
     if (!this.db) {
+      await this.init();
+    }
+
+    if (!this.db) {
       throw new Error("Database not initialized");
     }
 
@@ -53,6 +59,10 @@ export default class dbclient {
   }
 
   async createOrUpdateUser(newUser: UserInsert): Promise<User> {
+    if (!this.db) {
+      await this.init();
+    }
+
     if (!this.db) {
       throw new Error("Database not initialized");
     }
@@ -77,6 +87,10 @@ export default class dbclient {
 
   async updateUser(newUser: UserInsert): Promise<User> {
     if (!this.db) {
+      await this.init();
+    }
+
+    if (!this.db) {
       throw new Error("Database not initialized");
     }
 
@@ -87,6 +101,10 @@ export default class dbclient {
   }
 
   async getUsers(): Promise<User[]> {
+    if (!this.db) {
+      await this.init();
+    }
+
     if (!this.db) {
       throw new Error("Database not initialized");
     }
