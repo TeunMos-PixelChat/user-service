@@ -10,7 +10,6 @@ export default class dbclient {
   db: NodePgDatabase<Record<string, never>> | undefined;
 
   constructor(connString: string) {
-    
     this.client = new Client({
       connectionString: connString,
     })

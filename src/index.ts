@@ -158,10 +158,6 @@ app.get("/user", async (req: Request, res: Response) => {
 });
 
 
-const server = app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
-
 app.patch("/user", async (req: Request, res: Response) => {
   const user = useAuthUser(req, res);
   if (!user) return; // unauthorized
@@ -216,5 +212,15 @@ app.post("/user", async (req: Request, res: Response) => {
   const createdUser = await db.createUser(newUser);
   res.json(createdUser);
 });
+
+let server = null;
+
+db.init().then(() => {
+  server = app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  });
+});
+
+
 
 export { app, server }
