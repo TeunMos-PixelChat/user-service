@@ -16,8 +16,20 @@ export default class dbclient {
   }
 
   async init() {
-    await this.client.connect();
+    try {
+      await this.client.connect();
+    }
+    catch (err: any) {
+      if (err.message === 'Client has already been connected. You cannot reuse a client.') {
+        console.log('Client is already connected.');
+      } else {
+        throw err;
+      }
+    }
+    
     this.db = drizzle(this.client);
+    await this.db.select().from(users).limit(1);
+
     console.log("Database initialized");
   }
 
