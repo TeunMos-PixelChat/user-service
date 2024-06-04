@@ -5,6 +5,7 @@ import dbclient from './services/dbclient';
 import Auth0Service from './services/auth0';
 import { UserInsert } from './models/dbschema';
 import RabbitMQService from './models/rabbitmq';
+import * as http from 'http';
 
 dotenv.config();
 
@@ -213,7 +214,7 @@ app.post("/user", async (req: Request, res: Response) => {
   res.json(createdUser);
 });
 
-let server = null;
+let server: http.Server | null = null;
 
 db.init().then(() => {
   server = app.listen(port, () => {

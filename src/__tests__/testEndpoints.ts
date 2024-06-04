@@ -28,5 +28,5 @@ it("Test Endpoint test (without user)", async () => {
 });
 
 afterAll(done => {
-  server.close(done);
+  server?.close(done);
 });
