@@ -34,6 +34,20 @@ export default class RabbitMQService {
   }
 
   async sendUserUpdateMessage(user: UserInsert) {
-    await this.publishInQueue(this.queue, JSON.stringify(user));
+    const message = {
+      user: user,
+      action: "update",
+    }
+
+    await this.publishInQueue(this.queue, JSON.stringify(message));
+  }
+
+  async sendUserDeleteMessage(userId: string) {
+    const message = {
+      userId: userId,
+      action: "delete",
+    }
+
+    await this.publishInQueue(this.queue, JSON.stringify(message));
   }
 }
