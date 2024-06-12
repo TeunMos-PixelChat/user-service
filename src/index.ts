@@ -238,6 +238,8 @@ app.delete("/user/data", async (req: Request, res: Response) => {
   if (!user) return; // unauthorized
 
   const deletedUser = await db.deleteUser(user);
+  const accessToken = await auth0.getAccessToken();
+  await auth0.deleteUser(accessToken, user);
 
   rabbitmq.sendUserDeleteAllMessage(user);
 

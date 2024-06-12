@@ -64,6 +64,13 @@ export default class Auth0Service {
     return response.data;
   }
 
-
+  async deleteUser(accessToken: string, userId: string) {
+    const url = `https://${this.domain}/api/v2/users/${userId}`;
+    await axios.delete(url, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
+  }
 
 }
