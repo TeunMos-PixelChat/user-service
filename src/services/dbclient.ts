@@ -104,6 +104,16 @@ export default class dbclient {
     return userList;
   }
 
+  async deleteUser(userID: string): Promise<void> {
+    if (!this.db) {
+      throw new Error("Database not initialized");
+    }
+
+    await this.db.delete(users).where(
+      eq(users.id, userID)
+    );
+  }
+
 }
 
 

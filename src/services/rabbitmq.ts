@@ -1,5 +1,5 @@
 import client, { Connection, Channel, ConsumeMessage } from "amqplib";
-import { UserInsert } from "./dbschema";
+import { UserInsert } from "../models/dbschema";
 
 export default class RabbitMQService {
   connection!: Connection;
@@ -46,6 +46,15 @@ export default class RabbitMQService {
     const message = {
       userId: userId,
       action: "delete",
+    }
+
+    await this.publishInQueue(this.queue, JSON.stringify(message));
+  }
+
+  async sendUserDeleteAllMessage(userId: string) {
+    const message = {
+      userId: userId,
+      action: "deleteAll",
     }
 
     await this.publishInQueue(this.queue, JSON.stringify(message));

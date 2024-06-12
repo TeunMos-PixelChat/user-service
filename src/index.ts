@@ -4,7 +4,7 @@ import cors from 'cors';
 import dbclient from './services/dbclient';
 import Auth0Service from './services/auth0';
 import { UserInsert } from './models/dbschema';
-import RabbitMQService from './models/rabbitmq';
+import RabbitMQService from './services/rabbitmq';
 import * as http from 'http';
 
 dotenv.config();
@@ -66,7 +66,6 @@ async function getUser(userId: string)  {
 
     const newUser = await db.createUser({
       id: auth0User.user_id,
-      // status: 'active',
       name: auth0User.name,
       nickname: auth0User.nickname,
       picture: auth0User.picture,
@@ -222,6 +221,27 @@ db.init().then(() => {
   });
 });
 
+app.delete("/user", async (req: Request, res: Response) => {
+  const user = useAuthUser(req, res);
+  if (!user) return; // unauthorized
 
+  const deletedUser = await db.deleteUser(user);
+
+  rabbitmq.sendUserDeleteMessage(user);
+
+  res.json(deletedUser);
+});
+
+
+app.delete("/user/data", async (req: Request, res: Response) => {
+  const user = useAuthUser(req, res);
+  if (!user) return; // unauthorized
+
+  const deletedUser = await db.deleteUser(user);
+
+  rabbitmq.sendUserDeleteAllMessage(user);
+
+  res.json(deletedUser);
+});
 
 export { app, server }
