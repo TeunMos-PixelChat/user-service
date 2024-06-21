@@ -34,6 +34,11 @@ jest.mock("drizzle-orm/node-postgres", () => ({
   })),
 }));
 
+jest.mock("pg", () => ({
+  Client: jest.fn().mockImplementation(() => ({
+    connect: jest.fn(),
+  })),
+}));
 
 it("Root Endpoint /test", async () => {
   const response = await supertest(app).get("/");
