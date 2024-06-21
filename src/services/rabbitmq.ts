@@ -1,4 +1,4 @@
-import client, { Connection, Channel, ConsumeMessage } from "amqplib";
+import client, { Connection, Channel } from "amqplib";
 import { UserInsert } from "../models/dbschema";
 
 export default class RabbitMQService {

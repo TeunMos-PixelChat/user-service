@@ -1,8 +1,7 @@
-import { pgTable, serial, text, varchar } from "drizzle-orm/pg-core";
 import { NodePgDatabase, drizzle } from "drizzle-orm/node-postgres";
 import { Client } from "pg";
 
-import { user_service, users, users_friends, groups, users_groups, type User, UserInsert } from "../models/dbschema";
+import { users, type User, UserInsert } from "../models/dbschema";
 import { eq } from "drizzle-orm";
 
 export default class dbclient {
